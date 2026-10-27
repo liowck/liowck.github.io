@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lionel Wick</title>
+<meta name="description" content="Lionel Wick – Student am Faust-Gymnasium Staufen im Breisgau">
+<meta property="og:title" content="Lionel Wick">
+<meta property="og:description" content="Student · Faust-Gymnasium Staufen im Breisgau">
+<meta name="theme-color" content="#e8e8e8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1d1d1e" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23ffffff'/%3E%3Ctext x='32' y='47' font-family='Georgia,serif' font-weight='700' font-size='44' text-anchor='middle' fill='%231b1b1b'%3EW%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400..700&display=swap" rel="stylesheet">
+<style>
+/* Layout: nur die weisse Karte, mittig; Antippen dreht sie um die Hochachse */
+:root {
+  --ground: #e8e8e8;
+  --ground-muted: #6d6d6d;
+  --ground-ink: #3a3a3a;
+  --ink: #1b1b1b;
+  --paper: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.10);
+  --serif: "EB Garamond", "Garamond", "Times New Roman", serif;
+  --display: "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --ground: #1d1d1e; --ground-muted: #8e8e8e; --ground-ink: #d6d6d6; --shadow: rgba(0, 0, 0, 0.55); color-scheme: dark; }
+}
+:root[data-theme="dark"] { --ground: #1d1d1e; --ground-muted: #8e8e8e; --ground-ink: #d6d6d6; --shadow: rgba(0, 0, 0, 0.55); color-scheme: dark; }
+
+html, body { height: 100%; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; }
+body {
+  background: var(--ground);
+  font-family: var(--serif);
+  box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 22px;
+  padding-top: max(24px, env(safe-area-inset-top, 0px));
+  padding-bottom: max(24px, env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Drehbühne */
+.flip {
+  width: min(100%, 720px);
+  max-width: 100%;
+  aspect-ratio: 131 / 75;
+  perspective: 1800px;
+  cursor: pointer;
+  user-select: none; -webkit-user-select: none;
+}
+.flipper {
+  position: relative; width: 100%; height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .42s cubic-bezier(.3, 0, .15, 1);
+}
+.face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.face.back { transform: rotateY(180deg); }
+
+/* Karte (Vorderseite: Masse aus der Bateman-Vorlage, Rückseite: aus der WICK-Vorlage) */
+.card {
+  background: var(--paper);
+  color: var(--ink);
+  container-type: inline-size;
+  box-shadow: 0 1px 2px var(--shadow), 0 10px 30px var(--shadow);
+  font-family: var(--serif);
+  font-variant-numeric: lining-nums;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.card a { color: inherit; text-decoration: none; }
+.card a:hover { text-decoration: underline; text-underline-offset: .15em; text-decoration-thickness: 1px; }
+.card a:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
+
+.front { --cr: .65; --b: .86; --fit: 1; }
+.phone, .company, .full, .role, .bottom { position: absolute; line-height: 1; white-space: nowrap; }
+.phone { left: 7.36cqw; font-size: calc(2.335cqw / var(--cr)); top: calc(17.5% - var(--b) * 1em); text-transform: none; }
+.company {
+  right: 7.45cqw;
+  --fn: calc(2.60cqw / var(--cr));
+  --fp: calc(1.583cqw / var(--cr));
+  top: calc(17.5% - var(--b) * var(--fn));
+  text-align: left;
+}
+.company .name { display: block; font-size: var(--fn); }
+.company .place { display: block; font-size: var(--fp); margin-top: calc(3.322cqw - var(--fn) + var(--b) * (var(--fn) - var(--fp))); }
+.full { left: 0; right: 0; text-align: center; font-size: calc(3.4cqw / var(--cr)); top: calc(49% - var(--b) * 1em); }
+.full .sc { font-size: 0.70em; }
+.role { left: 0; right: 0; text-align: center; font-size: calc(2.284cqw / var(--cr)); top: calc(57.46% - var(--b) * 1em); }
+.bottom {
+  left: 4.31cqw; right: 4.31cqw;
+  font-size: calc(1.904cqw / var(--cr) * var(--fit));
+  top: calc(87.1% - var(--b) * 1em);
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+
+.back { --crW: .66; --bW: .9; --lsW: 0em; --crL: .66; --bL: .9; --lsL: .6em; }
+.back .surname, .back .given { position: absolute; left: 0; right: 0; text-align: center; line-height: 1; white-space: nowrap; font-family: var(--display); }
+.back .surname { font-weight: 700; font-size: calc(7.60cqw / var(--crW)); top: calc(50.84% - var(--bW) * 1em); letter-spacing: var(--lsW); text-indent: var(--lsW); }
+.back .rule {
+  --rt: max(1px, .241cqw);
+  position: absolute; left: 50%; width: 21.73%;
+  height: var(--rt); top: calc(53.79% - var(--rt) / 2);
+  transform: translateX(-50%); background: currentColor;
+}
+.back .given { font-weight: 500; font-size: calc(1.871cqw / var(--crL)); top: calc(60.64% - var(--bL) * 1em); letter-spacing: var(--lsL); text-indent: var(--lsL); }
+
+/* Umdrehen-Knopf */
+.turn {
+  font-family: var(--serif); font-size: 13px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ground-muted); background: none; border: 0; padding: 8px 12px; cursor: pointer;
+}
+.turn:hover { color: var(--ground-ink); }
+.turn:focus-visible { outline: 1px solid var(--ground-muted); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) { .flipper { transition: none; } }
+</style>
+</head>
+<body>
+<div class="flip" id="flip">
+  <div class="flipper" id="flipper">
+    <article class="card face front" id="card" aria-label="Vorderseite">
+      <a class="phone" href="tel:+4915739312216">+49 157 39312216</a>
+      <div class="company">
+        <div class="name">Faust-Gymnasium</div>
+        <div class="place">Staufen im Breisgau</div>
+      </div>
+      <div class="full">L<span class="sc">ionel</span> W<span class="sc">ick</span></div>
+      <div class="role">Student</div>
+      <div class="bottom">
+        <a href="mailto:lionelwick@proton.me">lionelwick@proton.me</a>
+        <a href="https://www.linkedin.com/in/lionel-wick" target="_blank" rel="noopener">linkedin.com/in/lionel-wick</a>
+        <span>lionel.w_09</span>
+      </div>
+    </article>
+    <article class="card face back" id="card-back" aria-label="Rückseite" inert>
+      <div class="surname">Wick</div>
+      <div class="rule" aria-hidden="true"></div>
+      <div class="given">Lionel</div>
+    </article>
+  </div>
+</div>
+<button type="button" class="turn" id="turn">Umdrehen</button>
+
+<script>
+(function () {
+  var flip = document.getElementById('flip');
+  var flipper = document.getElementById('flipper');
+  var front = document.getElementById('card');
+  var back = document.getElementById('card-back');
+  var angle = 0;
+
+  // Dreht immer in dieselbe Richtung weiter; die verdeckte Seite wird inert.
+  function turn() {
+    angle += 180;
+    flipper.style.transform = 'rotateY(' + angle + 'deg)';
+    var showingBack = (angle / 180) % 2 === 1;
+    if (showingBack) { front.setAttribute('inert', ''); back.removeAttribute('inert'); }
+    else { back.setAttribute('inert', ''); front.removeAttribute('inert'); }
+  }
+  flip.addEventListener('click', function (e) {
+    if (e.target.closest('a')) return;           // Links öffnen, nicht drehen
+    var sel = window.getSelection && window.getSelection();
+    if (sel && String(sel).length) return;       // markierter Text bleibt markiert
+    turn();
+  });
+  document.getElementById('turn').addEventListener('click', turn);
+  document.addEventListener('keydown', function (e) {
+    if (e.target.closest && e.target.closest('a, button')) return;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') turn();
+  });
+
+  // Schriftmetrik messen (wie im Editor), damit die Masse exakt stimmen.
+  var FONT = "'EB Garamond', Garamond, 'Times New Roman', serif";
+  var DISPLAY = "'Source Serif 4', 'Source Serif Pro', Georgia, 'Times New Roman', serif";
+  var BACK = {
+    W: { text: 'WICK',   weight: 700, cap: 7.60,  ink: 32.11, lsMin: -0.04, lsMax: 0.10 },
+    L: { text: 'LIONEL', weight: 500, cap: 1.871, ink: 16.96, lsMin: 0,     lsMax: 1.5 }
+  };
+  function calibrateFront() {
+    var ctx = document.createElement('canvas').getContext('2d');
+    ctx.font = '400 100px ' + FONT;
+    var m = ctx.measureText('H');
+    if (m.actualBoundingBoxAscent > 0) front.style.setProperty('--cr', (m.actualBoundingBoxAscent / 100).toFixed(4));
+    var A = m.fontBoundingBoxAscent, D = m.fontBoundingBoxDescent;
+    if (A > 0 && D >= 0) front.style.setProperty('--b', (((100 - (A + D)) / 2 + A) / 100).toFixed(4));
+    var row = front.querySelector('.bottom');
+    front.style.setProperty('--fit', '1');
+    var sum = 0;
+    Array.prototype.forEach.call(row.children, function (el) { sum += el.getBoundingClientRect().width; });
+    var avail = row.clientWidth - 2 * front.clientWidth * 0.03;
+    if (sum > avail && sum > 0) front.style.setProperty('--fit', (avail / sum).toFixed(4));
+  }
+  function measureLine(ctx, spec, cardW) {
+    ctx.font = spec.weight + ' 100px ' + DISPLAY;
+    var h = ctx.measureText('H');
+    var cr = h.actualBoundingBoxAscent > 0 ? h.actualBoundingBoxAscent / 100 : 0.66;
+    var A = h.fontBoundingBoxAscent, D = h.fontBoundingBoxDescent;
+    var b = (A > 0 && D >= 0) ? ((100 - (A + D)) / 2 + A) / 100 : 0.9;
+    var fs = spec.cap / 100 * cardW / cr;
+    ctx.font = spec.weight + ' ' + fs + 'px ' + DISPLAY;
+    var m = ctx.measureText(spec.text);
+    var natural = m.actualBoundingBoxLeft + m.actualBoundingBoxRight;
+    var ls = (spec.ink / 100 * cardW - natural) / (spec.text.length - 1);
+    return { cr: cr, b: b, lsEm: Math.max(spec.lsMin, Math.min(spec.lsMax, ls / fs)) };
+  }
+  function calibrateBack() {
+    var ctx = document.createElement('canvas').getContext('2d');
+    var w = back.clientWidth || 720;
+    var mw = measureLine(ctx, BACK.W, w), ml = measureLine(ctx, BACK.L, w);
+    back.style.setProperty('--crW', mw.cr.toFixed(4)); back.style.setProperty('--bW', mw.b.toFixed(4)); back.style.setProperty('--lsW', mw.lsEm.toFixed(4) + 'em');
+    back.style.setProperty('--crL', ml.cr.toFixed(4)); back.style.setProperty('--bL', ml.b.toFixed(4)); back.style.setProperty('--lsL', ml.lsEm.toFixed(4) + 'em');
+  }
+  function calibrate() { try { calibrateFront(); calibrateBack(); } catch (e) {} }
+  calibrate();
+  window.addEventListener('resize', calibrate);
+  if (document.fonts) {
+    document.fonts.load('400 100px "EB Garamond"').then(calibrate, function () {});
+    document.fonts.load('700 100px "Source Serif 4"').then(calibrate, function () {});
+    document.fonts.load('500 100px "Source Serif 4"').then(calibrate, function () {});
+    document.fonts.ready.then(calibrate);
+  }
+})();
+</script>
+</body>
+</html>
